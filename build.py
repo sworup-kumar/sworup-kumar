@@ -24,6 +24,9 @@ LIGHT = dict(text="#1F2328", muted="#57606A", dim="#8C959F", faint="#6E7781",
              rule="rgba(0,0,0,.10)", cellon="#1F2328",
              celloff="rgba(0,0,0,.10)")
 
+SECTION_GAP = 40
+SECTION_GAP_MOBILE = 32
+
 # ======== EDIT ME: content ========
 # About paragraph, one entry per rendered line (keep each ~80 chars to fit width)
 ABOUT_LINES = [
@@ -96,14 +99,16 @@ def banner_a(p):
     s.append(f'<text x="34" y="{sub_b}" class="sub" fill="{p["muted"]}">'
              f'BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
     # 00 / ABOUT
-    s.append(f'<text x="8" y="186" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
-    s.append(f'<line x1="120" y1="182" x2="832" y2="182" stroke="{p["rule"]}" stroke-width="1"/>')
-    ay = 216
+    about_y = box_bottom + SECTION_GAP + 9
+    s.append(f'<text x="8" y="{about_y}" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
+    s.append(f'<line x1="120" y1="{about_y-4}" x2="832" y2="{about_y-4}" stroke="{p["rule"]}" stroke-width="1"/>')
+    ay = about_y + 30
     for line in ABOUT_LINES:
         s.append(f'<text x="8" y="{ay}" class="ab" fill="{p["about"]}">{esc(line)}</text>')
         ay += 22
     # 01 / SOCIALS header (chips render below as markdown)
-    sy = ay + 28
+    about_bottom = ay - 18
+    sy = about_bottom + SECTION_GAP + 9
     s.append(f'<text x="8" y="{sy}" class="sh" fill="{p["faint"]}">01 / SOCIALS</text>')
     s.append(f'<line x1="140" y1="{sy-4}" x2="832" y2="{sy-4}" stroke="{p["rule"]}" stroke-width="1"/>')
     H = sy + 22
@@ -136,9 +141,10 @@ def lang_cells(x, y, name, pct, maxp, p):
 def banner_b(p):
     maxp = max(pt for _, pt in LANGS)
     rows = (len(LANGS) + 1) // 2
-    lang_top = 60
+    most_y = 48
+    lang_top = most_y + 26
     lang_bottom = lang_top + (rows - 1) * 32 + 12
-    rec_h = lang_bottom + 40           # recognitions header baseline
+    rec_h = lang_bottom + SECTION_GAP + 9
     W, H = 840, rec_h + 128
     s = []
     s.append(f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
@@ -153,8 +159,8 @@ def banner_b(p):
              f'.ft{{font-size:10px;letter-spacing:1.5px}}'
              f'</style></style></defs>'.replace("</style></style>", "</style>"))
     # 02 / MOST USED
-    s.append(f'<text x="8" y="34" class="sh" fill="{p["faint"]}">02 / MOST USED</text>')
-    s.append(f'<line x1="150" y1="30" x2="832" y2="30" stroke="{p["rule"]}" stroke-width="1"/>')
+    s.append(f'<text x="8" y="{most_y}" class="sh" fill="{p["faint"]}">02 / MOST USED</text>')
+    s.append(f'<line x1="150" y1="{most_y-4}" x2="832" y2="{most_y-4}" stroke="{p["rule"]}" stroke-width="1"/>')
     for i, (name, pct) in enumerate(LANGS):
         col = 8 if i % 2 == 0 else 430
         y = lang_top + (i // 2) * 32
@@ -170,8 +176,7 @@ def banner_b(p):
              f'<tspan fill="{p["text"]}">HONORABLE MENTION {esc("—")} WIX STUDIO x NEWFORM</tspan></text>')
     s.append(f'<rect x="400" y="{cy}" width="248" height="34" rx="6" fill="none" '
              f'stroke="{p["border"]}" stroke-width="1"/>')
-    s.append(f'<text x="416" y="{cy+21}" class="chip"><tspan fill="{p["dim"]}">{esc("—")} </tspan>'
-             f'<tspan fill="{p["text"]}">FRAMER TOP 1% CREATOR</tspan></text>')
+    s.append(f'<text x="416" y="{cy+21}" class="chip" fill="{p["text"]}">FRAMER TOP 1% CREATOR</text>')
     # footer
     fy = cy + 70
     s.append(f'<line x1="8" y1="{fy}" x2="832" y2="{fy}" stroke="{p["rule"]}" stroke-width="1"/>')
@@ -181,7 +186,7 @@ def banner_b(p):
     s.append('</svg>')
     return "\n".join(s)
 
-# ---------- social chips (neutral, theme-agnostic) ----------
+# ---------- social chips (adaptive palette, individual links) ----------
 SOCIALS = [
     ("linkedin", "/ LINKEDIN", "https://www.linkedin.com/in/sworup-behuria/"),
     ("instagram", "/ INSTAGRAM", "https://www.instagram.com/sworup_ku/"),
@@ -189,22 +194,22 @@ SOCIALS = [
     ("portfolio", "/ PORTFOLIO", "https://www.sworupkumar.com/"),
     ("email", "/ EMAIL", "mailto:hello@sworupkumar.com"),
 ]
-CHIP_TXT = "#7C848D"
-CHIP_SLASH = "#5C636B"
-CHIP_BORDER = "rgba(124,132,141,.40)"
-
 def chip_svg(label):
-    adv = 7.3  # 12px mono
-    w = round(len(label) * adv) + 44
-    h = 38
+    adv = 7.9  # 13px mono
+    w = round(len(label) * adv) + 46
+    h = 44
     return (
         f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
         f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{esc(label)}">'
-        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace;font-size:12px;letter-spacing:1px}}</style></defs>'
+        f'<defs><style>{FONT_FACE}'
+        f':root{{--chip-text:#57606A;--chip-slash:#8C959F;--chip-border:rgba(0,0,0,.20)}}'
+        f'@media (prefers-color-scheme:dark){{:root{{--chip-text:#C4C4C4;--chip-slash:#6E6E6E;--chip-border:rgba(255,255,255,.18)}}}}'
+        f'text{{font-family:FM,monospace;font-size:13px;letter-spacing:1px}}'
+        f'</style></defs>'
         f'<rect x="1" y="1" width="{w-2}" height="{h-2}" rx="6" fill="none" '
-        f'stroke="{CHIP_BORDER}" stroke-width="1"/>'
-        f'<text x="18" y="24"><tspan fill="{CHIP_SLASH}">/ </tspan>'
-        f'<tspan fill="{CHIP_TXT}">{esc(label[2:])}</tspan></text></svg>'
+        f'stroke="var(--chip-border)" stroke-width="1"/>'
+        f'<text x="18" y="28"><tspan fill="var(--chip-slash)">/ </tspan>'
+        f'<tspan fill="var(--chip-text)">{esc(label[2:])}</tspan></text></svg>'
     )
 
 # ---------- mobile variants (narrow viewBox, single column, larger relative text) ----------
@@ -261,13 +266,15 @@ def banner_a_mobile(p):
     s.append(f'<text x="20" y="{lead_b}" class="lead" fill="{p["dim"]}">// INITIALISING PROFILE</text>')
     s.append(title); s.append(cursor)
     s.append(f'<text x="20" y="{sub_b}" class="sub" fill="{p["muted"]}">BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
-    s.append(f'<text x="6" y="152" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
-    s.append(f'<line x1="84" y1="148" x2="434" y2="148" stroke="{p["rule"]}" stroke-width="1"/>')
-    ay = 178
+    about_y = box_bottom + SECTION_GAP_MOBILE + 8
+    s.append(f'<text x="6" y="{about_y}" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
+    s.append(f'<line x1="84" y1="{about_y-4}" x2="434" y2="{about_y-4}" stroke="{p["rule"]}" stroke-width="1"/>')
+    ay = about_y + 26
     for line in wrap(" ".join(ABOUT_LINES), 48):
         s.append(f'<text x="6" y="{ay}" class="ab" fill="{p["about"]}">{esc(line)}</text>')
         ay += 20
-    sy = ay + 24
+    about_bottom = ay - 16
+    sy = about_bottom + SECTION_GAP_MOBILE + 8
     s.append(f'<text x="6" y="{sy}" class="sh" fill="{p["faint"]}">01 / SOCIALS</text>')
     s.append(f'<line x1="120" y1="{sy-4}" x2="434" y2="{sy-4}" stroke="{p["rule"]}" stroke-width="1"/>')
     H = sy + 18
@@ -277,15 +284,16 @@ def banner_a_mobile(p):
 def banner_b_mobile(p):
     W = 440
     maxp = max(pt for _, pt in LANGS)
+    most_y = 42
     s = [f'<svg width="{W}" height="600" viewBox="0 0 {W} 600" '
          f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Most used languages and recognitions">']
     s.append(f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}'
              f'.sh{{font-size:10px;letter-spacing:2px}}.ln{{font-size:11px;letter-spacing:1px}}'
              f'.pc{{font-size:11px;letter-spacing:1px}}.chip{{font-size:10px;letter-spacing:1px}}'
              f'.ft{{font-size:9px;letter-spacing:1.5px}}</style></defs>')
-    s.append(f'<text x="6" y="30" class="sh" fill="{p["faint"]}">02 / MOST USED</text>')
-    s.append(f'<line x1="140" y1="26" x2="434" y2="26" stroke="{p["rule"]}" stroke-width="1"/>')
-    ly = 56
+    s.append(f'<text x="6" y="{most_y}" class="sh" fill="{p["faint"]}">02 / MOST USED</text>')
+    s.append(f'<line x1="140" y1="{most_y-4}" x2="434" y2="{most_y-4}" stroke="{p["rule"]}" stroke-width="1"/>')
+    ly = most_y + 26
     for name, pct in LANGS:
         s.append(f'<text x="6" y="{ly+11}" class="ln" fill="{p["about"]}">{name}</text>')
         cx = 116
@@ -295,7 +303,8 @@ def banner_b_mobile(p):
             s.append(f'<rect x="{cx + i*16}" y="{ly+1}" width="12" height="12" fill="{col}"/>')
         s.append(f'<text x="{cx + 12*16 + 8}" y="{ly+11}" class="pc" fill="{p["faint"]}">{pct}%</text>')
         ly += 28
-    ry = ly + 20
+    lang_bottom = ly - 15
+    ry = lang_bottom + SECTION_GAP_MOBILE + 8
     s.append(f'<text x="6" y="{ry}" class="sh" fill="{p["faint"]}">03 / RECOGNITIONS</text>')
     s.append(f'<line x1="172" y1="{ry-4}" x2="434" y2="{ry-4}" stroke="{p["rule"]}" stroke-width="1"/>')
     c1 = ry + 14
@@ -304,8 +313,7 @@ def banner_b_mobile(p):
              f'<tspan fill="{p["text"]}">HONORABLE MENTION {esc("—")} WIX STUDIO x NEWFORM</tspan></text>')
     c2 = c1 + 42
     s.append(f'<rect x="6" y="{c2}" width="428" height="32" rx="6" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
-    s.append(f'<text x="18" y="{c2+20}" class="chip"><tspan fill="{p["dim"]}">{esc("—")} </tspan>'
-             f'<tspan fill="{p["text"]}">FRAMER TOP 1% CREATOR</tspan></text>')
+    s.append(f'<text x="18" y="{c2+20}" class="chip" fill="{p["text"]}">FRAMER TOP 1% CREATOR</text>')
     fy = c2 + 58
     s.append(f'<line x1="6" y1="{fy}" x2="434" y2="{fy}" stroke="{p["rule"]}" stroke-width="1"/>')
     s.append(f'<text x="6" y="{fy+22}" class="ft" fill="{p["dim"]}">DESIGN + DEV BY ME</text>')
@@ -314,8 +322,12 @@ def banner_b_mobile(p):
     return ("\n".join(s) + "\n</svg>").replace('height="600" viewBox="0 0 440 600"',
                                                f'height="{H}" viewBox="0 0 440 {H}"')
 
-# ---------- sponsor banner (neutral palette, works on light + dark) ----------
-SP_T, SP_DIM, SP_RULE = "#7C848D", "#5C636B", "rgba(124,132,141,.35)"
+# ---------- sponsor banner (same adaptive palette as the profile hero) ----------
+SPONSOR_THEME = (
+    ':root{--sp-text:#1F2328;--sp-muted:#57606A;--sp-dim:#8C959F;--sp-border:rgba(0,0,0,.16)}'
+    '@media (prefers-color-scheme:dark){:root{--sp-text:#EDEDED;--sp-muted:#8A8A8A;'
+    '--sp-dim:#5A5A5A;--sp-border:rgba(255,255,255,.14)}}'
+)
 
 def _sp_typing(fs, x0, baseline, cid):
     adv = fs * 0.618 + 1
@@ -330,8 +342,8 @@ def _sp_typing(fs, x0, baseline, cid):
             f'<animate attributeName="width" values="{wv}" keyTimes="{kv}" '
             f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath>')
     title = (f'<text x="{x0}" y="{baseline}" clip-path="url(#{cid})" '
-             f'style="font-size:{fs}px;letter-spacing:1px" fill="{SP_T}">SUPPORT THE WORK</text>')
-    cursor = (f'<rect y="{top}" width="2.5" height="{round(fs)}" fill="{SP_T}">'
+             f'style="font-size:{fs}px;letter-spacing:1px" fill="var(--sp-text)">SUPPORT THE WORK</text>')
+    cursor = (f'<rect y="{top}" width="2.5" height="{round(fs)}" fill="var(--sp-text)">'
               f'<animate attributeName="x" values="{xv}" keyTimes="{kv}" '
               f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
               f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
@@ -339,45 +351,45 @@ def _sp_typing(fs, x0, baseline, cid):
     return clip, title, cursor
 
 def sponsor_banner():          # desktop — larger, equal padding
-    W, x0, PAD, box_top = 840, 34, 34, 8
+    W, x0, PAD, box_top = 840, 34, 40, 8
     lead_b = box_top + PAD + 9         # 12px ascent ~9
-    head_b = lead_b + 52
-    sub_b = head_b + 42
+    head_b = lead_b + 59
+    sub_b = head_b + 48
     box_bottom = sub_b + PAD
     box_h, H = box_bottom - box_top, box_bottom + 8
-    clip, title, cursor = _sp_typing(30, x0, head_b, "ts")
+    clip, title, cursor = _sp_typing(36, x0, head_b, "ts")
     return (
         f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
         f'role="img" aria-label="Support the work">'
-        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>{clip}</defs>'
-        f'<rect x="8" y="{box_top}" width="824" height="{box_h}" rx="8" fill="none" stroke="{SP_RULE}" stroke-width="1"/>'
-        f'<text x="{x0}" y="{lead_b}" style="font-size:12px;letter-spacing:2px" fill="{SP_DIM}">// INITIALISING SPONSORSHIP</text>'
+        f'<defs><style>{FONT_FACE}{SPONSOR_THEME}text{{font-family:FM,monospace}}</style>{clip}</defs>'
+        f'<rect x="8" y="{box_top}" width="824" height="{box_h}" rx="8" fill="none" stroke="var(--sp-border)" stroke-width="1"/>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:12px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
         f'{title}{cursor}'
-        f'<text x="{x0}" y="{sub_b}" style="font-size:12px;letter-spacing:.6px" fill="{SP_DIM}">'
+        f'<text x="{x0}" y="{sub_b}" style="font-size:13px;letter-spacing:.6px" fill="var(--sp-muted)">'
         f'INDEPENDENT DESIGN + DEV {esc("—")} FUNDED BY PEOPLE WHO USE IT.</text>'
         f'</svg>'
     )
 
 def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
-    W, x0, PAD, box_top = 460, 22, 20, 8
+    W, x0, PAD, box_top = 460, 22, 24, 8
     lead_b = box_top + PAD + 7         # 10px ascent ~7
-    head_b = lead_b + 40
+    head_b = lead_b + 45
     sub_lines = ["INDEPENDENT DESIGN + DEV " + esc("—") + " FUNDED", "BY PEOPLE WHO USE IT."]
-    sub_b1 = head_b + 34
-    sub_b2 = sub_b1 + 16
+    sub_b1 = head_b + 38
+    sub_b2 = sub_b1 + 18
     box_bottom = sub_b2 + PAD
     box_h, H = box_bottom - box_top, box_bottom + 8
-    clip, title, cursor = _sp_typing(22, x0, head_b, "tsm")
+    clip, title, cursor = _sp_typing(26, x0, head_b, "tsm")
     subs = "".join(
-        f'<text x="{x0}" y="{y}" style="font-size:9.5px;letter-spacing:.4px" fill="{SP_DIM}">{line}</text>'
+        f'<text x="{x0}" y="{y}" style="font-size:10px;letter-spacing:.4px" fill="var(--sp-muted)">{line}</text>'
         for line, y in [(sub_lines[0], sub_b1), (sub_lines[1], sub_b2)]
     )
     return (
         f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
         f'role="img" aria-label="Support the work">'
-        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>{clip}</defs>'
-        f'<rect x="6" y="{box_top}" width="448" height="{box_h}" rx="8" fill="none" stroke="{SP_RULE}" stroke-width="1"/>'
-        f'<text x="{x0}" y="{lead_b}" style="font-size:10px;letter-spacing:2px" fill="{SP_DIM}">// INITIALISING SPONSORSHIP</text>'
+        f'<defs><style>{FONT_FACE}{SPONSOR_THEME}text{{font-family:FM,monospace}}</style>{clip}</defs>'
+        f'<rect x="6" y="{box_top}" width="448" height="{box_h}" rx="8" fill="none" stroke="var(--sp-border)" stroke-width="1"/>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:10px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
         f'{title}{cursor}{subs}'
         f'</svg>'
     )
@@ -386,7 +398,7 @@ def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
 def readme():
     chips = []
     for key, label, url in SOCIALS:
-        chips.append(f'[<img src="./assets/soc-{key}.svg" height="36" alt="{esc(label)}">]({url})')
+        chips.append(f'[<img src="./assets/soc-{key}.svg" height="42" alt="{esc(label)}">]({url})')
     chip_row = "\n".join(chips)
     return f"""<picture>
   <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="./assets/banner-a-mobile-dark.svg">
