@@ -298,6 +298,39 @@ def banner_b_mobile(p):
     return ("\n".join(s) + "\n</svg>").replace('height="600" viewBox="0 0 440 600"',
                                                f'height="{H}" viewBox="0 0 440 {H}"')
 
+# ---------- sponsor banner (neutral palette, works on light + dark) ----------
+def sponsor_banner():
+    t, dim, rule = "#7C848D", "#5C636B", "rgba(124,132,141,.35)"
+    W, H = 840, 150
+    adv = 24 * 0.618 + 1  # fs24 + 1px letter-spacing
+    n = 16  # "SUPPORT THE WORK"
+    widths = [round(i * adv) for i in range(n + 1)]
+    kt = [round(i / n * 0.40, 4) for i in range(n + 1)]
+    wvals = ";".join(str(w) for w in widths) + f";{widths[-1]};0"
+    ktvals = ";".join(str(k) for k in kt) + ";0.60;1"
+    xvals = ";".join(str(30 + w) for w in widths) + f";{30 + widths[-1]};30"
+    return (
+        f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
+        f'role="img" aria-label="Support the work">'
+        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>'
+        f'<clipPath id="ts"><rect x="28" y="66" width="0" height="30">'
+        f'<animate attributeName="width" values="{wvals}" keyTimes="{ktvals}" '
+        f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath></defs>'
+        f'<rect x="6" y="6" width="828" height="138" rx="8" fill="none" stroke="{rule}" stroke-width="1"/>'
+        f'<text x="30" y="44" style="font-size:11px;letter-spacing:2px" fill="{dim}">'
+        f'// INITIALISING SPONSORSHIP</text>'
+        f'<text x="30" y="90" clip-path="url(#ts)" style="font-size:24px;letter-spacing:1px" '
+        f'fill="{t}">SUPPORT THE WORK</text>'
+        f'<rect y="68" width="2.5" height="26" fill="{t}">'
+        f'<animate attributeName="x" values="{xvals}" keyTimes="{ktvals}" '
+        f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
+        f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
+        f'dur="1s" calcMode="discrete" repeatCount="indefinite"/></rect>'
+        f'<text x="30" y="122" style="font-size:11px;letter-spacing:.6px" fill="{dim}">'
+        f'INDEPENDENT DESIGN + DEV {esc("—")} FUNDED BY PEOPLE WHO USE IT.</text>'
+        f'</svg>'
+    )
+
 # ---------- README ----------
 def readme():
     chips = []
@@ -337,6 +370,7 @@ def main():
     open(os.path.join(ASSETS, "banner-a-mobile-light.svg"), "w").write(banner_a_mobile(LIGHT))
     open(os.path.join(ASSETS, "banner-b-mobile-dark.svg"), "w").write(banner_b_mobile(DARK))
     open(os.path.join(ASSETS, "banner-b-mobile-light.svg"), "w").write(banner_b_mobile(LIGHT))
+    open(os.path.join(ASSETS, "sponsor-banner.svg"), "w").write(sponsor_banner())
     for key, label, _ in SOCIALS:
         open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(chip_svg(label))
     open(os.path.join(HERE, "README.md"), "w").write(readme())
