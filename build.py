@@ -27,9 +27,8 @@ LIGHT = dict(text="#1F2328", muted="#57606A", dim="#8C959F", faint="#6E7781",
 # ======== EDIT ME: content ========
 # About paragraph, one entry per rendered line (keep each ~80 chars to fit width)
 ABOUT_LINES = [
-    "I'M A SPEC-DRIVEN PRODUCT DESIGNER. I TURN CONCEPTS INTO",
-    "INTERACTIVE, ANIMATED, DEV-READY DESIGNS THAT AMPLIFIES YOUR PRESENCE.",
-    "I ALSO BUILD APPS!"
+    "SPEC-DRIVEN PRODUCT DESIGNER BRIDGING DESIGN AND DEVELOPMENT. I TURN CONCEPTS INTO",
+    "INTERACTIVE, ANIMATED, DEV-READY DESIGNS — FIGMA, FRAMER, REACT / TS, GSAP, WEBGL.",
 ]
 # ==================================
 
@@ -198,6 +197,106 @@ def chip_svg(label):
         f'<tspan fill="{CHIP_TXT}">{esc(label[2:])}</tspan></text></svg>'
     )
 
+# ---------- mobile variants (narrow viewBox, single column, larger relative text) ----------
+def wrap(text, maxc):
+    lines, cur = [], ""
+    for w in text.split():
+        if len(cur) + len(w) + (1 if cur else 0) <= maxc:
+            cur = (cur + " " + w) if cur else w
+        else:
+            lines.append(cur); cur = w
+    if cur:
+        lines.append(cur)
+    return lines
+
+def hero_typing_m(p, fs=22, x0=20, baseline=72):
+    adv = fs * 0.618 + 1
+    n = 16
+    widths = [round(i * adv) for i in range(n + 1)]
+    kt = [round(i / n * 0.40, 4) for i in range(n + 1)]
+    wvals = ";".join(str(w) for w in widths) + f";{widths[-1]};0"
+    ktvals = ";".join(str(k) for k in kt) + ";0.60;1"
+    xvals = ";".join(str(x0 + w) for w in widths) + f";{x0 + widths[-1]};{x0}"
+    top, h = round(baseline - fs * 0.80), round(fs * 1.05)
+    clip = (f'<clipPath id="tcm"><rect x="{x0-2}" y="{top}" width="0" height="{h}">'
+            f'<animate attributeName="width" values="{wvals}" keyTimes="{ktvals}" '
+            f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath>')
+    title = (f'<text x="{x0}" y="{baseline}" clip-path="url(#tcm)" '
+             f'style="font-size:{fs}px;letter-spacing:1px" fill="{p["text"]}">PRODUCT DESIGNER</text>')
+    cursor = (f'<rect y="{top}" width="2.5" height="{round(fs)}" fill="{p["text"]}">'
+              f'<animate attributeName="x" values="{xvals}" keyTimes="{ktvals}" '
+              f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
+              f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
+              f'dur="1s" calcMode="discrete" repeatCount="indefinite"/></rect>')
+    return clip, title, cursor
+
+def banner_a_mobile(p):
+    W = 440
+    clip, title, cursor = hero_typing_m(p)
+    s = [f'<svg width="{W}" height="500" viewBox="0 0 {W} 500" '
+         f'xmlns="http://www.w3.org/2000/svg" role="img" '
+         f'aria-label="Sworup Kumar Behuria, Product Designer">']
+    s.append(f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}'
+             f'.lead{{font-size:10px;letter-spacing:2px}}.sub{{font-size:9.5px;letter-spacing:.4px}}'
+             f'.sh{{font-size:10px;letter-spacing:2px}}.ab{{font-size:11px;letter-spacing:.3px}}'
+             f'</style>{clip}</defs>')
+    s.append(f'<rect x="6" y="8" width="428" height="108" rx="8" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
+    s.append(f'<text x="20" y="36" class="lead" fill="{p["dim"]}">// INITIALISING PROFILE</text>')
+    s.append(title); s.append(cursor)
+    s.append(f'<text x="20" y="100" class="sub" fill="{p["muted"]}">BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
+    s.append(f'<text x="6" y="152" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
+    s.append(f'<line x1="84" y1="148" x2="434" y2="148" stroke="{p["rule"]}" stroke-width="1"/>')
+    ay = 178
+    for line in wrap(" ".join(ABOUT_LINES), 48):
+        s.append(f'<text x="6" y="{ay}" class="ab" fill="{p["about"]}">{esc(line)}</text>')
+        ay += 20
+    sy = ay + 24
+    s.append(f'<text x="6" y="{sy}" class="sh" fill="{p["faint"]}">01 / SOCIALS</text>')
+    s.append(f'<line x1="120" y1="{sy-4}" x2="434" y2="{sy-4}" stroke="{p["rule"]}" stroke-width="1"/>')
+    H = sy + 18
+    return ("\n".join(s) + "\n</svg>").replace('height="500" viewBox="0 0 440 500"',
+                                               f'height="{H}" viewBox="0 0 440 {H}"')
+
+def banner_b_mobile(p):
+    W = 440
+    maxp = max(pt for _, pt in LANGS)
+    s = [f'<svg width="{W}" height="600" viewBox="0 0 {W} 600" '
+         f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Most used languages and recognitions">']
+    s.append(f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}'
+             f'.sh{{font-size:10px;letter-spacing:2px}}.ln{{font-size:11px;letter-spacing:1px}}'
+             f'.pc{{font-size:11px;letter-spacing:1px}}.chip{{font-size:10px;letter-spacing:1px}}'
+             f'.ft{{font-size:9px;letter-spacing:1.5px}}</style></defs>')
+    s.append(f'<text x="6" y="30" class="sh" fill="{p["faint"]}">02 / MOST USED</text>')
+    s.append(f'<line x1="140" y1="26" x2="434" y2="26" stroke="{p["rule"]}" stroke-width="1"/>')
+    ly = 56
+    for name, pct in LANGS:
+        s.append(f'<text x="6" y="{ly+11}" class="ln" fill="{p["about"]}">{name}</text>')
+        cx = 116
+        filled = round(pct / maxp * 12)
+        for i in range(12):
+            col = p["cellon"] if i < filled else p["celloff"]
+            s.append(f'<rect x="{cx + i*16}" y="{ly+1}" width="12" height="12" fill="{col}"/>')
+        s.append(f'<text x="{cx + 12*16 + 8}" y="{ly+11}" class="pc" fill="{p["faint"]}">{pct}%</text>')
+        ly += 28
+    ry = ly + 20
+    s.append(f'<text x="6" y="{ry}" class="sh" fill="{p["faint"]}">03 / RECOGNITIONS</text>')
+    s.append(f'<line x1="172" y1="{ry-4}" x2="434" y2="{ry-4}" stroke="{p["rule"]}" stroke-width="1"/>')
+    c1 = ry + 14
+    s.append(f'<rect x="6" y="{c1}" width="428" height="32" rx="6" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
+    s.append(f'<text x="18" y="{c1+20}" class="chip"><tspan fill="{p["dim"]}">3X </tspan>'
+             f'<tspan fill="{p["text"]}">HONORABLE MENTION {esc("—")} WIX STUDIO x NEWFORM</tspan></text>')
+    c2 = c1 + 42
+    s.append(f'<rect x="6" y="{c2}" width="428" height="32" rx="6" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
+    s.append(f'<text x="18" y="{c2+20}" class="chip"><tspan fill="{p["dim"]}">{esc("—")} </tspan>'
+             f'<tspan fill="{p["text"]}">FRAMER TOP 1% CREATOR</tspan></text>')
+    fy = c2 + 58
+    s.append(f'<line x1="6" y1="{fy}" x2="434" y2="{fy}" stroke="{p["rule"]}" stroke-width="1"/>')
+    s.append(f'<text x="6" y="{fy+22}" class="ft" fill="{p["dim"]}">DESIGN + DEV BY ME</text>')
+    s.append(f'<text x="6" y="{fy+38}" class="ft" fill="{p["dim"]}">{esc("©")} 2026 SWORUP KUMAR BEHURIA</text>')
+    H = fy + 50
+    return ("\n".join(s) + "\n</svg>").replace('height="600" viewBox="0 0 440 600"',
+                                               f'height="{H}" viewBox="0 0 440 {H}"')
+
 # ---------- README ----------
 def readme():
     chips = []
@@ -205,23 +304,26 @@ def readme():
         chips.append(f'[<img src="./assets/soc-{key}.svg" height="36" alt="{esc(label)}">]({url})')
     chip_row = "\n".join(chips)
     return f"""<picture>
+  <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="./assets/banner-a-mobile-dark.svg">
+  <source media="(max-width: 768px)" srcset="./assets/banner-a-mobile-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-a-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/banner-a-light.svg">
-  <img alt="Sworup Kumar Behuria — Product Designer" src="./assets/banner-a-dark.svg" width="100%">
+  <img alt="Sworup Kumar Behuria — Product Designer" src="./assets/banner-a-light.svg" width="100%">
 </picture>
 
 {chip_row}
 
 <picture>
+  <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="./assets/banner-b-mobile-dark.svg">
+  <source media="(max-width: 768px)" srcset="./assets/banner-b-mobile-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-b-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/banner-b-light.svg">
-  <img alt="Most used languages and recognitions" src="./assets/banner-b-dark.svg" width="100%">
+  <img alt="Most used languages and recognitions" src="./assets/banner-b-light.svg" width="100%">
 </picture>
 
 <!--
   Repo: sworup-kumar/sworup-kumar  (must match your username exactly)
+  Banners are responsive: mobile variants serve under 768px, desktop above.
   The GitHub-native activity graph renders automatically below this README.
-  Language %s and recognitions are hand-set in build.py — edit + re-run to update.
+  Language %s come from fetch_langs.py (live); recognitions/about live in build.py.
 -->
 """
 
@@ -230,6 +332,10 @@ def main():
     open(os.path.join(ASSETS, "banner-a-light.svg"), "w").write(banner_a(LIGHT))
     open(os.path.join(ASSETS, "banner-b-dark.svg"), "w").write(banner_b(DARK))
     open(os.path.join(ASSETS, "banner-b-light.svg"), "w").write(banner_b(LIGHT))
+    open(os.path.join(ASSETS, "banner-a-mobile-dark.svg"), "w").write(banner_a_mobile(DARK))
+    open(os.path.join(ASSETS, "banner-a-mobile-light.svg"), "w").write(banner_a_mobile(LIGHT))
+    open(os.path.join(ASSETS, "banner-b-mobile-dark.svg"), "w").write(banner_b_mobile(DARK))
+    open(os.path.join(ASSETS, "banner-b-mobile-light.svg"), "w").write(banner_b_mobile(LIGHT))
     for key, label, _ in SOCIALS:
         open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(chip_svg(label))
     open(os.path.join(HERE, "README.md"), "w").write(readme())
