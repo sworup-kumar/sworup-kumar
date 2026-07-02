@@ -27,8 +27,9 @@ LIGHT = dict(text="#1F2328", muted="#57606A", dim="#8C959F", faint="#6E7781",
 # ======== EDIT ME: content ========
 # About paragraph, one entry per rendered line (keep each ~80 chars to fit width)
 ABOUT_LINES = [
-    "SPEC-DRIVEN PRODUCT DESIGNER BRIDGING DESIGN AND DEVELOPMENT. I TURN CONCEPTS INTO",
-    "INTERACTIVE, ANIMATED, DEV-READY DESIGNS — FIGMA, FRAMER, REACT / TS, GSAP, WEBGL.",
+    "I'M A SPEC-DRIVEN PRODUCT DESIGNER. I TURN CONCEPTS INTO INTERACTIVE,",
+    "ANIMATED, DEV-READY DESIGNS THAT AMPLIFIES YOUR PRESENCE.",
+    "I ALSO BUILD APPS!",
 ]
 # ==================================
 
