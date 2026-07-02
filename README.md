@@ -5,11 +5,7 @@
   <img alt="Sworup Kumar Behuria — Product Designer" src="./assets/banner-a-light.svg" width="100%">
 </picture>
 
-[<img src="./assets/soc-linkedin.svg" height="42" alt="/ LINKEDIN">](https://www.linkedin.com/in/sworup-behuria/)
-[<img src="./assets/soc-instagram.svg" height="42" alt="/ INSTAGRAM">](https://www.instagram.com/sworup_ku/)
-[<img src="./assets/soc-x.svg" height="42" alt="/ TWITTER (X)">](https://x.com/sworup_ku)
-[<img src="./assets/soc-portfolio.svg" height="42" alt="/ PORTFOLIO">](https://www.sworupkumar.com/)
-[<img src="./assets/soc-email.svg" height="42" alt="/ EMAIL">](mailto:hello@sworupkumar.com)
+<a href="https://www.linkedin.com/in/sworup-behuria/"><picture><source media="(max-width: 768px)" srcset="./assets/soc-linkedin-mobile.svg"><img src="./assets/soc-linkedin.svg" height="42" alt="/ LINKEDIN"></picture></a> <a href="https://www.instagram.com/sworup_ku/"><picture><source media="(max-width: 768px)" srcset="./assets/soc-instagram-mobile.svg"><img src="./assets/soc-instagram.svg" height="42" alt="/ INSTAGRAM"></picture></a> <a href="https://x.com/sworup_ku"><picture><source media="(max-width: 768px)" srcset="./assets/soc-x-mobile.svg"><img src="./assets/soc-x.svg" height="42" alt="/ TWITTER (X)"></picture></a> <a href="https://www.sworupkumar.com/"><picture><source media="(max-width: 768px)" srcset="./assets/soc-portfolio-mobile.svg"><img src="./assets/soc-portfolio.svg" height="42" alt="/ PORTFOLIO"></picture></a> <a href="mailto:hello@sworupkumar.com"><picture><source media="(max-width: 768px)" srcset="./assets/soc-email-mobile.svg"><img src="./assets/soc-email.svg" height="42" alt="/ EMAIL"></picture></a>
 
 <picture>
   <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="./assets/banner-b-mobile-dark.svg">

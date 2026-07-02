@@ -24,8 +24,10 @@ LIGHT = dict(text="#1F2328", muted="#57606A", dim="#8C959F", faint="#6E7781",
              rule="rgba(0,0,0,.10)", cellon="#1F2328",
              celloff="rgba(0,0,0,.10)")
 
-SECTION_GAP = 40
-SECTION_GAP_MOBILE = 32
+# Match the effective gap GitHub adds between the linked social row and the
+# following banner. These values are measured in each SVG's viewBox units.
+SECTION_GAP = 60
+SECTION_GAP_MOBILE = 65
 
 # ======== EDIT ME: content ========
 # About paragraph, one entry per rendered line (keep each ~80 chars to fit width)
@@ -194,10 +196,12 @@ SOCIALS = [
     ("portfolio", "/ PORTFOLIO", "https://www.sworupkumar.com/"),
     ("email", "/ EMAIL", "mailto:hello@sworupkumar.com"),
 ]
-def chip_svg(label):
+def chip_svg(label, width=None, centered=False):
     adv = 7.9  # 13px mono
-    w = round(len(label) * adv) + 46
+    w = width or round(len(label) * adv) + 46
     h = 44
+    text_x = w / 2 if centered else 18
+    anchor = ' text-anchor="middle"' if centered else ''
     return (
         f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
         f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="{esc(label)}">'
@@ -208,7 +212,7 @@ def chip_svg(label):
         f'</style></defs>'
         f'<rect x="1" y="1" width="{w-2}" height="{h-2}" rx="6" fill="none" '
         f'stroke="var(--chip-border)" stroke-width="1"/>'
-        f'<text x="18" y="28"><tspan fill="var(--chip-slash)">/ </tspan>'
+        f'<text x="{text_x:g}" y="28"{anchor}><tspan fill="var(--chip-slash)">/ </tspan>'
         f'<tspan fill="var(--chip-text)">{esc(label[2:])}</tspan></text></svg>'
     )
 
@@ -350,38 +354,38 @@ def _sp_typing(fs, x0, baseline, cid):
               f'dur="1s" calcMode="discrete" repeatCount="indefinite"/></rect>')
     return clip, title, cursor
 
-def sponsor_banner():          # desktop — larger, equal padding
-    W, x0, PAD, box_top = 840, 34, 40, 8
-    lead_b = box_top + PAD + 9         # 12px ascent ~9
-    head_b = lead_b + 59
-    sub_b = head_b + 48
+def sponsor_banner():          # universal banner used by GitHub on desktop + mobile
+    W, x0, PAD, box_top = 840, 34, 56, 8
+    lead_b = box_top + PAD + 14        # 18px ascent ~14
+    head_b = lead_b + 96
+    sub_b = head_b + 78
     box_bottom = sub_b + PAD
     box_h, H = box_bottom - box_top, box_bottom + 8
-    clip, title, cursor = _sp_typing(36, x0, head_b, "ts")
+    clip, title, cursor = _sp_typing(72, x0, head_b, "ts")
     return (
         f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
         f'role="img" aria-label="Support the work">'
         f'<defs><style>{FONT_FACE}{SPONSOR_THEME}text{{font-family:FM,monospace}}</style>{clip}</defs>'
         f'<rect x="8" y="{box_top}" width="824" height="{box_h}" rx="8" fill="none" stroke="var(--sp-border)" stroke-width="1"/>'
-        f'<text x="{x0}" y="{lead_b}" style="font-size:12px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:18px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
         f'{title}{cursor}'
-        f'<text x="{x0}" y="{sub_b}" style="font-size:13px;letter-spacing:.6px" fill="var(--sp-muted)">'
+        f'<text x="{x0}" y="{sub_b}" style="font-size:20px;letter-spacing:.6px" fill="var(--sp-muted)">'
         f'INDEPENDENT DESIGN + DEV {esc("—")} FUNDED BY PEOPLE WHO USE IT.</text>'
         f'</svg>'
     )
 
 def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
-    W, x0, PAD, box_top = 460, 22, 24, 8
-    lead_b = box_top + PAD + 7         # 10px ascent ~7
-    head_b = lead_b + 45
+    W, x0, PAD, box_top = 460, 22, 30, 8
+    lead_b = box_top + PAD + 9         # 12px ascent ~9
+    head_b = lead_b + 56
     sub_lines = ["INDEPENDENT DESIGN + DEV " + esc("—") + " FUNDED", "BY PEOPLE WHO USE IT."]
-    sub_b1 = head_b + 38
-    sub_b2 = sub_b1 + 18
+    sub_b1 = head_b + 48
+    sub_b2 = sub_b1 + 22
     box_bottom = sub_b2 + PAD
     box_h, H = box_bottom - box_top, box_bottom + 8
-    clip, title, cursor = _sp_typing(26, x0, head_b, "tsm")
+    clip, title, cursor = _sp_typing(36, x0, head_b, "tsm")
     subs = "".join(
-        f'<text x="{x0}" y="{y}" style="font-size:10px;letter-spacing:.4px" fill="var(--sp-muted)">{line}</text>'
+        f'<text x="{x0}" y="{y}" style="font-size:12px;letter-spacing:.4px" fill="var(--sp-muted)">{line}</text>'
         for line, y in [(sub_lines[0], sub_b1), (sub_lines[1], sub_b2)]
     )
     return (
@@ -389,7 +393,7 @@ def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
         f'role="img" aria-label="Support the work">'
         f'<defs><style>{FONT_FACE}{SPONSOR_THEME}text{{font-family:FM,monospace}}</style>{clip}</defs>'
         f'<rect x="6" y="{box_top}" width="448" height="{box_h}" rx="8" fill="none" stroke="var(--sp-border)" stroke-width="1"/>'
-        f'<text x="{x0}" y="{lead_b}" style="font-size:10px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:12px;letter-spacing:2px" fill="var(--sp-dim)">// INITIALISING SPONSORSHIP</text>'
         f'{title}{cursor}{subs}'
         f'</svg>'
     )
@@ -398,8 +402,13 @@ def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
 def readme():
     chips = []
     for key, label, url in SOCIALS:
-        chips.append(f'[<img src="./assets/soc-{key}.svg" height="42" alt="{esc(label)}">]({url})')
-    chip_row = "\n".join(chips)
+        chips.append(
+            f'<a href="{url}"><picture>'
+            f'<source media="(max-width: 768px)" srcset="./assets/soc-{key}-mobile.svg">'
+            f'<img src="./assets/soc-{key}.svg" height="42" alt="{esc(label)}">'
+            f'</picture></a>'
+        )
+    chip_row = " ".join(chips)
     return f"""<picture>
   <source media="(max-width: 768px) and (prefers-color-scheme: dark)" srcset="./assets/banner-a-mobile-dark.svg">
   <source media="(max-width: 768px)" srcset="./assets/banner-a-mobile-light.svg">
@@ -437,6 +446,10 @@ def main():
     open(os.path.join(ASSETS, "sponsor-banner-mobile.svg"), "w").write(sponsor_banner_mobile())
     for key, label, _ in SOCIALS:
         open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(chip_svg(label))
+        mobile_width = 320 if key == "email" else 156
+        open(os.path.join(ASSETS, f"soc-{key}-mobile.svg"), "w").write(
+            chip_svg(label, width=mobile_width, centered=True)
+        )
     open(os.path.join(HERE, "README.md"), "w").write(readme())
     print("built:", sorted(os.listdir(ASSETS)))
 
