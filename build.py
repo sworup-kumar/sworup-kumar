@@ -34,7 +34,7 @@ ABOUT_LINES = [
 # ==================================
 
 # ---------- hero typing SMIL ----------
-def hero_typing(p):
+def hero_typing(p, baseline=90):
     adv = 18.3  # 0.618em advance @28px + 1px letter-spacing
     n = 16  # chars in "PRODUCT DESIGNER"
     widths = [round(i * adv) for i in range(n + 1)]
@@ -42,17 +42,18 @@ def hero_typing(p):
     wvals = ";".join(str(w) for w in widths) + f";{widths[-1]};0"
     ktvals = ";".join(str(k) for k in kt) + ";0.60;1"
     xvals = ";".join(str(34 + w) for w in widths) + f";{34 + widths[-1]};34"
+    clip_y, cur_y = baseline - 26, baseline - 24
     clip = (
-        f'<clipPath id="tc"><rect x="32" y="74" width="0" height="34">'
+        f'<clipPath id="tc"><rect x="32" y="{clip_y}" width="0" height="34">'
         f'<animate attributeName="width" values="{wvals}" keyTimes="{ktvals}" '
         f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath>'
     )
     title = (
-        f'<text x="34" y="100" clip-path="url(#tc)" class="h1" fill="{p["text"]}">'
+        f'<text x="34" y="{baseline}" clip-path="url(#tc)" class="h1" fill="{p["text"]}">'
         f'PRODUCT DESIGNER</text>'
     )
     cursor = (
-        f'<rect y="76" width="2.5" height="28" fill="{p["text"]}">'
+        f'<rect y="{cur_y}" width="2.5" height="28" fill="{p["text"]}">'
         f'<animate attributeName="x" values="{xvals}" keyTimes="{ktvals}" '
         f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
         f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
@@ -62,7 +63,15 @@ def hero_typing(p):
 
 # ---------- banner A: hero + about + socials header ----------
 def banner_a(p):
-    clip, title, cursor = hero_typing(p)
+    # equal-padding hero: box derives from content + PAD on top and bottom
+    PAD = 28
+    box_top = 10
+    lead_b = box_top + PAD + 8          # 11px lead ascent ~8
+    title_b = lead_b + 46
+    sub_b = title_b + 28
+    box_bottom = sub_b + PAD
+    box_h = box_bottom - box_top
+    clip, title, cursor = hero_typing(p, baseline=title_b)
     W, H = 840, 310
     s = []
     s.append(f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
@@ -78,13 +87,13 @@ def banner_a(p):
              f'.ab{{font-size:12.5px;letter-spacing:.4px}}'
              f'</style>{clip}</defs>')
     # hero box
-    s.append(f'<rect x="8" y="10" width="824" height="132" rx="8" fill="none" '
+    s.append(f'<rect x="8" y="{box_top}" width="824" height="{box_h}" rx="8" fill="none" '
              f'stroke="{p["border"]}" stroke-width="1"/>')
-    s.append(f'<text x="34" y="54" class="lead" fill="{p["dim"]}">'
+    s.append(f'<text x="34" y="{lead_b}" class="lead" fill="{p["dim"]}">'
              f'// INITIALISING PROFILE</text>')
     s.append(title)
     s.append(cursor)
-    s.append(f'<text x="34" y="128" class="sub" fill="{p["muted"]}">'
+    s.append(f'<text x="34" y="{sub_b}" class="sub" fill="{p["muted"]}">'
              f'BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
     # 00 / ABOUT
     s.append(f'<text x="8" y="186" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
@@ -233,7 +242,14 @@ def hero_typing_m(p, fs=22, x0=20, baseline=72):
 
 def banner_a_mobile(p):
     W = 440
-    clip, title, cursor = hero_typing_m(p)
+    PAD = 18
+    box_top = 8
+    lead_b = box_top + PAD + 7          # 10px lead ascent ~7
+    title_b = lead_b + 36
+    sub_b = title_b + 28
+    box_bottom = sub_b + PAD
+    box_h = box_bottom - box_top
+    clip, title, cursor = hero_typing_m(p, baseline=title_b)
     s = [f'<svg width="{W}" height="500" viewBox="0 0 {W} 500" '
          f'xmlns="http://www.w3.org/2000/svg" role="img" '
          f'aria-label="Sworup Kumar Behuria, Product Designer">']
@@ -241,10 +257,10 @@ def banner_a_mobile(p):
              f'.lead{{font-size:10px;letter-spacing:2px}}.sub{{font-size:9.5px;letter-spacing:.4px}}'
              f'.sh{{font-size:10px;letter-spacing:2px}}.ab{{font-size:11px;letter-spacing:.3px}}'
              f'</style>{clip}</defs>')
-    s.append(f'<rect x="6" y="8" width="428" height="108" rx="8" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
-    s.append(f'<text x="20" y="36" class="lead" fill="{p["dim"]}">// INITIALISING PROFILE</text>')
+    s.append(f'<rect x="6" y="{box_top}" width="428" height="{box_h}" rx="8" fill="none" stroke="{p["border"]}" stroke-width="1"/>')
+    s.append(f'<text x="20" y="{lead_b}" class="lead" fill="{p["dim"]}">// INITIALISING PROFILE</text>')
     s.append(title); s.append(cursor)
-    s.append(f'<text x="20" y="100" class="sub" fill="{p["muted"]}">BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
+    s.append(f'<text x="20" y="{sub_b}" class="sub" fill="{p["muted"]}">BRIDGING THE GAP BETWEEN DESIGN AND DEVELOPMENT.</text>')
     s.append(f'<text x="6" y="152" class="sh" fill="{p["faint"]}">00 / ABOUT</text>')
     s.append(f'<line x1="84" y1="148" x2="434" y2="148" stroke="{p["rule"]}" stroke-width="1"/>')
     ay = 178
@@ -299,35 +315,70 @@ def banner_b_mobile(p):
                                                f'height="{H}" viewBox="0 0 440 {H}"')
 
 # ---------- sponsor banner (neutral palette, works on light + dark) ----------
-def sponsor_banner():
-    t, dim, rule = "#7C848D", "#5C636B", "rgba(124,132,141,.35)"
-    W, H = 840, 150
-    adv = 24 * 0.618 + 1  # fs24 + 1px letter-spacing
+SP_T, SP_DIM, SP_RULE = "#7C848D", "#5C636B", "rgba(124,132,141,.35)"
+
+def _sp_typing(fs, x0, baseline, cid):
+    adv = fs * 0.618 + 1
     n = 16  # "SUPPORT THE WORK"
     widths = [round(i * adv) for i in range(n + 1)]
     kt = [round(i / n * 0.40, 4) for i in range(n + 1)]
-    wvals = ";".join(str(w) for w in widths) + f";{widths[-1]};0"
-    ktvals = ";".join(str(k) for k in kt) + ";0.60;1"
-    xvals = ";".join(str(30 + w) for w in widths) + f";{30 + widths[-1]};30"
+    wv = ";".join(str(w) for w in widths) + f";{widths[-1]};0"
+    kv = ";".join(str(k) for k in kt) + ";0.60;1"
+    xv = ";".join(str(x0 + w) for w in widths) + f";{x0 + widths[-1]};{x0}"
+    top, h = round(baseline - fs * 0.80), round(fs * 1.05)
+    clip = (f'<clipPath id="{cid}"><rect x="{x0-2}" y="{top}" width="0" height="{h}">'
+            f'<animate attributeName="width" values="{wv}" keyTimes="{kv}" '
+            f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath>')
+    title = (f'<text x="{x0}" y="{baseline}" clip-path="url(#{cid})" '
+             f'style="font-size:{fs}px;letter-spacing:1px" fill="{SP_T}">SUPPORT THE WORK</text>')
+    cursor = (f'<rect y="{top}" width="2.5" height="{round(fs)}" fill="{SP_T}">'
+              f'<animate attributeName="x" values="{xv}" keyTimes="{kv}" '
+              f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
+              f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
+              f'dur="1s" calcMode="discrete" repeatCount="indefinite"/></rect>')
+    return clip, title, cursor
+
+def sponsor_banner():          # desktop — larger, equal padding
+    W, x0, PAD, box_top = 840, 34, 34, 8
+    lead_b = box_top + PAD + 9         # 12px ascent ~9
+    head_b = lead_b + 52
+    sub_b = head_b + 42
+    box_bottom = sub_b + PAD
+    box_h, H = box_bottom - box_top, box_bottom + 8
+    clip, title, cursor = _sp_typing(30, x0, head_b, "ts")
     return (
         f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
         f'role="img" aria-label="Support the work">'
-        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>'
-        f'<clipPath id="ts"><rect x="28" y="66" width="0" height="30">'
-        f'<animate attributeName="width" values="{wvals}" keyTimes="{ktvals}" '
-        f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/></rect></clipPath></defs>'
-        f'<rect x="6" y="6" width="828" height="138" rx="8" fill="none" stroke="{rule}" stroke-width="1"/>'
-        f'<text x="30" y="44" style="font-size:11px;letter-spacing:2px" fill="{dim}">'
-        f'// INITIALISING SPONSORSHIP</text>'
-        f'<text x="30" y="90" clip-path="url(#ts)" style="font-size:24px;letter-spacing:1px" '
-        f'fill="{t}">SUPPORT THE WORK</text>'
-        f'<rect y="68" width="2.5" height="26" fill="{t}">'
-        f'<animate attributeName="x" values="{xvals}" keyTimes="{ktvals}" '
-        f'dur="4.5s" calcMode="discrete" repeatCount="indefinite"/>'
-        f'<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.5;0.5;1" '
-        f'dur="1s" calcMode="discrete" repeatCount="indefinite"/></rect>'
-        f'<text x="30" y="122" style="font-size:11px;letter-spacing:.6px" fill="{dim}">'
+        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>{clip}</defs>'
+        f'<rect x="8" y="{box_top}" width="824" height="{box_h}" rx="8" fill="none" stroke="{SP_RULE}" stroke-width="1"/>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:12px;letter-spacing:2px" fill="{SP_DIM}">// INITIALISING SPONSORSHIP</text>'
+        f'{title}{cursor}'
+        f'<text x="{x0}" y="{sub_b}" style="font-size:12px;letter-spacing:.6px" fill="{SP_DIM}">'
         f'INDEPENDENT DESIGN + DEV {esc("—")} FUNDED BY PEOPLE WHO USE IT.</text>'
+        f'</svg>'
+    )
+
+def sponsor_banner_mobile():   # narrow, larger relative text, wrapped subtitle
+    W, x0, PAD, box_top = 460, 22, 20, 8
+    lead_b = box_top + PAD + 7         # 10px ascent ~7
+    head_b = lead_b + 40
+    sub_lines = ["INDEPENDENT DESIGN + DEV " + esc("—") + " FUNDED", "BY PEOPLE WHO USE IT."]
+    sub_b1 = head_b + 34
+    sub_b2 = sub_b1 + 16
+    box_bottom = sub_b2 + PAD
+    box_h, H = box_bottom - box_top, box_bottom + 8
+    clip, title, cursor = _sp_typing(22, x0, head_b, "tsm")
+    subs = "".join(
+        f'<text x="{x0}" y="{y}" style="font-size:9.5px;letter-spacing:.4px" fill="{SP_DIM}">{line}</text>'
+        for line, y in [(sub_lines[0], sub_b1), (sub_lines[1], sub_b2)]
+    )
+    return (
+        f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
+        f'role="img" aria-label="Support the work">'
+        f'<defs><style>{FONT_FACE}text{{font-family:FM,monospace}}</style>{clip}</defs>'
+        f'<rect x="6" y="{box_top}" width="448" height="{box_h}" rx="8" fill="none" stroke="{SP_RULE}" stroke-width="1"/>'
+        f'<text x="{x0}" y="{lead_b}" style="font-size:10px;letter-spacing:2px" fill="{SP_DIM}">// INITIALISING SPONSORSHIP</text>'
+        f'{title}{cursor}{subs}'
         f'</svg>'
     )
 
@@ -371,6 +422,7 @@ def main():
     open(os.path.join(ASSETS, "banner-b-mobile-dark.svg"), "w").write(banner_b_mobile(DARK))
     open(os.path.join(ASSETS, "banner-b-mobile-light.svg"), "w").write(banner_b_mobile(LIGHT))
     open(os.path.join(ASSETS, "sponsor-banner.svg"), "w").write(sponsor_banner())
+    open(os.path.join(ASSETS, "sponsor-banner-mobile.svg"), "w").write(sponsor_banner_mobile())
     for key, label, _ in SOCIALS:
         open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(chip_svg(label))
     open(os.path.join(HERE, "README.md"), "w").write(readme())
