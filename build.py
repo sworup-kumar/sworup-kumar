@@ -196,11 +196,12 @@ SOCIALS = [
     ("portfolio", "/ PORTFOLIO", "https://www.sworupkumar.com/"),
     ("email", "/ EMAIL", "mailto:hello@sworupkumar.com"),
 ]
-def chip_svg(label, width=None, centered=False):
-    adv = 7.9  # 13px mono
+def chip_svg(label, width=None, centered=False, height=44, font_size=13):
+    adv = font_size * 0.608
     w = width or round(len(label) * adv) + 46
-    h = 44
+    h = height
     text_x = w / 2 if centered else 18
+    text_y = round((h + font_size) / 2)
     anchor = ' text-anchor="middle"' if centered else ''
     return (
         f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" '
@@ -208,11 +209,11 @@ def chip_svg(label, width=None, centered=False):
         f'<defs><style>{FONT_FACE}'
         f':root{{--chip-text:#57606A;--chip-slash:#8C959F;--chip-border:rgba(0,0,0,.20)}}'
         f'@media (prefers-color-scheme:dark){{:root{{--chip-text:#C4C4C4;--chip-slash:#6E6E6E;--chip-border:rgba(255,255,255,.18)}}}}'
-        f'text{{font-family:FM,monospace;font-size:13px;letter-spacing:1px}}'
+        f'text{{font-family:FM,monospace;font-size:{font_size}px;letter-spacing:1px}}'
         f'</style></defs>'
         f'<rect x="1" y="1" width="{w-2}" height="{h-2}" rx="6" fill="none" '
         f'stroke="var(--chip-border)" stroke-width="1"/>'
-        f'<text x="{text_x:g}" y="28"{anchor}><tspan fill="var(--chip-slash)">/ </tspan>'
+        f'<text x="{text_x:g}" y="{text_y}"{anchor}><tspan fill="var(--chip-slash)">/ </tspan>'
         f'<tspan fill="var(--chip-text)">{esc(label[2:])}</tspan></text></svg>'
     )
 
@@ -405,7 +406,7 @@ def readme():
         chips.append(
             f'<a href="{url}"><picture>'
             f'<source media="(max-width: 768px)" srcset="./assets/soc-{key}-mobile.svg">'
-            f'<img src="./assets/soc-{key}.svg" height="42" alt="{esc(label)}">'
+            f'<img src="./assets/soc-{key}.svg" alt="{esc(label)}">'
             f'</picture></a>'
         )
     chip_row = " ".join(chips)
@@ -445,10 +446,19 @@ def main():
     open(os.path.join(ASSETS, "sponsor-banner.svg"), "w").write(sponsor_banner())
     open(os.path.join(ASSETS, "sponsor-banner-mobile.svg"), "w").write(sponsor_banner_mobile())
     for key, label, _ in SOCIALS:
-        open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(chip_svg(label))
-        mobile_width = 320 if key == "email" else 156
+        desktop_width = round((round(len(label) * 13 * 0.608) + 46) * 42 / 44)
+        open(os.path.join(ASSETS, f"soc-{key}.svg"), "w").write(
+            chip_svg(label, width=desktop_width, height=42)
+        )
+        mobile_width = 280 if key == "email" else 138
         open(os.path.join(ASSETS, f"soc-{key}-mobile.svg"), "w").write(
-            chip_svg(label, width=mobile_width, centered=True)
+            chip_svg(
+                label,
+                width=mobile_width,
+                centered=True,
+                height=36,
+                font_size=11,
+            )
         )
     open(os.path.join(HERE, "README.md"), "w").write(readme())
     print("built:", sorted(os.listdir(ASSETS)))
