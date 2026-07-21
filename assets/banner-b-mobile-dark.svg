@@ -15,21 +15,21 @@
 <rect x="260" y="69" width="12" height="12" fill="#EDEDED"/>
 <rect x="276" y="69" width="12" height="12" fill="#EDEDED"/>
 <rect x="292" y="69" width="12" height="12" fill="#EDEDED"/>
-<text x="316" y="79" class="pc" fill="#6E6E6E">53%</text>
+<text x="316" y="79" class="pc" fill="#6E6E6E">59%</text>
 <text x="6" y="107" class="ln" fill="#C4C4C4">SWIFT</text>
 <rect x="116" y="97" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="97" width="12" height="12" fill="#EDEDED"/>
 <rect x="148" y="97" width="12" height="12" fill="#EDEDED"/>
 <rect x="164" y="97" width="12" height="12" fill="#EDEDED"/>
 <rect x="180" y="97" width="12" height="12" fill="#EDEDED"/>
-<rect x="196" y="97" width="12" height="12" fill="#EDEDED"/>
-<rect x="212" y="97" width="12" height="12" fill="#EDEDED"/>
+<rect x="196" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
+<rect x="212" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="228" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="244" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="260" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="276" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
-<text x="316" y="107" class="pc" fill="#6E6E6E">33%</text>
+<text x="316" y="107" class="pc" fill="#6E6E6E">27%</text>
 <text x="6" y="135" class="ln" fill="#C4C4C4">JAVASCRIPT</text>
 <rect x="116" y="125" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="125" width="12" height="12" fill="#EDEDED"/>
@@ -43,9 +43,9 @@
 <rect x="260" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="276" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
-<text x="316" y="135" class="pc" fill="#6E6E6E">11%</text>
+<text x="316" y="135" class="pc" fill="#6E6E6E">9%</text>
 <text x="6" y="163" class="ln" fill="#C4C4C4">CSS</text>
-<rect x="116" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
+<rect x="116" y="153" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="148" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="164" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
@@ -57,7 +57,7 @@
 <rect x="260" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="276" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
-<text x="316" y="163" class="pc" fill="#6E6E6E">2%</text>
+<text x="316" y="163" class="pc" fill="#6E6E6E">3%</text>
 <text x="6" y="191" class="ln" fill="#C4C4C4">SHELL</text>
 <rect x="116" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="132" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
