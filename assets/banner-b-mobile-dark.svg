@@ -15,7 +15,7 @@
 <rect x="260" y="69" width="12" height="12" fill="#EDEDED"/>
 <rect x="276" y="69" width="12" height="12" fill="#EDEDED"/>
 <rect x="292" y="69" width="12" height="12" fill="#EDEDED"/>
-<text x="316" y="79" class="pc" fill="#6E6E6E">75%</text>
+<text x="316" y="79" class="pc" fill="#6E6E6E">74%</text>
 <text x="6" y="107" class="ln" fill="#C4C4C4">SWIFT</text>
 <rect x="116" y="97" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="97" width="12" height="12" fill="#EDEDED"/>
@@ -29,8 +29,8 @@
 <rect x="260" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="276" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="97" width="12" height="12" fill="rgba(255,255,255,.13)"/>
-<text x="316" y="107" class="pc" fill="#6E6E6E">15%</text>
-<text x="6" y="135" class="ln" fill="#C4C4C4">JAVASCRIPT</text>
+<text x="316" y="107" class="pc" fill="#6E6E6E">13%</text>
+<text x="6" y="135" class="ln" fill="#C4C4C4">CSS</text>
 <rect x="116" y="125" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="148" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
@@ -44,7 +44,7 @@
 <rect x="276" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="125" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <text x="316" y="135" class="pc" fill="#6E6E6E">5%</text>
-<text x="6" y="163" class="ln" fill="#C4C4C4">CSS</text>
+<text x="6" y="163" class="ln" fill="#C4C4C4">JAVASCRIPT</text>
 <rect x="116" y="153" width="12" height="12" fill="#EDEDED"/>
 <rect x="132" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="148" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
@@ -58,7 +58,7 @@
 <rect x="276" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="153" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <text x="316" y="163" class="pc" fill="#6E6E6E">4%</text>
-<text x="6" y="191" class="ln" fill="#C4C4C4">SHELL</text>
+<text x="6" y="191" class="ln" fill="#C4C4C4">ASTRO</text>
 <rect x="116" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="132" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="148" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
@@ -71,8 +71,8 @@
 <rect x="260" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="276" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="292" y="181" width="12" height="12" fill="rgba(255,255,255,.13)"/>
-<text x="316" y="191" class="pc" fill="#6E6E6E">1%</text>
-<text x="6" y="219" class="ln" fill="#C4C4C4">HTML</text>
+<text x="316" y="191" class="pc" fill="#6E6E6E">2%</text>
+<text x="6" y="219" class="ln" fill="#C4C4C4">SHELL</text>
 <rect x="116" y="209" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="132" y="209" width="12" height="12" fill="rgba(255,255,255,.13)"/>
 <rect x="148" y="209" width="12" height="12" fill="rgba(255,255,255,.13)"/>
